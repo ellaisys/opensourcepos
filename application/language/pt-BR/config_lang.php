@@ -1,4 +1,5 @@
-<?php
+<?php 
+
 $lang["config_address"] = "Endereço";
 $lang["config_address_required"] = "Endereço da empresa é um campo obrigatório.";
 $lang["config_allow_duplicate_barcodes"] = "Permitir códigos de barras duplicados";
@@ -45,6 +46,16 @@ $lang["config_country_codes"] = "Código do país";
 $lang["config_country_codes_tooltip"] = "Vírgula lista de códigos de país separado para pesquisa de endereços nominatim.";
 $lang["config_currency_decimals"] = "Decimais moeda";
 $lang["config_currency_symbol"] = "Simbolo moeda";
+$lang["config_custom1"] = "";
+$lang["config_custom10"] = "";
+$lang["config_custom2"] = "";
+$lang["config_custom3"] = "";
+$lang["config_custom4"] = "";
+$lang["config_custom5"] = "";
+$lang["config_custom6"] = "";
+$lang["config_custom7"] = "";
+$lang["config_custom8"] = "";
+$lang["config_custom9"] = "";
 $lang["config_customer_reward"] = "Recompensa";
 $lang["config_customer_reward_duplicate"] = "Recompensa deve ser única.";
 $lang["config_customer_reward_enable"] = "Ativar recompensas do cliente";
@@ -170,6 +181,7 @@ $lang["config_msg_src"] = "SMS-API Remetente ID";
 $lang["config_msg_src_required"] = "SMS-API Remetente ID é um campo obrigatório";
 $lang["config_msg_uid"] = "SMS-API usuário";
 $lang["config_msg_uid_required"] = "SMS-API usuário é um campo obrigatório";
+$lang["config_multi_pack_enabled"] = "";
 $lang["config_none"] = "nenhum";
 $lang["config_notify_alignment"] = "Notificação Posição Popup";
 $lang["config_number_format"] = "Formato do número";
@@ -231,6 +243,7 @@ $lang["config_sales_quote_format"] = "Formato de cotação de vendas";
 $lang["config_saved_successfully"] = "Configuração salva com sucesso.";
 $lang["config_saved_unsuccessfully"] = "Configuração não salva.";
 $lang["config_show_office_group"] = "Mostrar ícone do escritório";
+$lang["config_statistics"] = "";
 $lang["config_statistics_tooltip"] = "Envie estatísticas para desenvolvimento e aprimoramento de recursos.";
 $lang["config_stock_location"] = "Localização do Estoque";
 $lang["config_stock_location_duplicate"] = "Por favor, use um nome de localização única.";

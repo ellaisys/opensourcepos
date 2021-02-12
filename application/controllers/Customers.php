@@ -109,8 +109,6 @@ class Customers extends Persons
 	*/
 	public function view($customer_id = -1)
 	{
-		$customer_sales_tax_support = $this->config->item('customer_sales_tax_support');
-
 		$info = $this->Customer->get_info($customer_id);
 		foreach(get_object_vars($info) as $property => $value)
 		{
@@ -125,9 +123,20 @@ class Customers extends Persons
 		}
 
 		$employee_info = $this->Employee->get_info($info->employee_id);
-		$data['employee'] = $employee_info->first_name . ' ' . $employee_info->last_name;
+		$data['employee'] = $this->xss_clean($employee_info->first_name . ' ' . $employee_info->last_name);
 
-		$data['sales_tax_code_label'] = $info->sales_tax_code . ' ' . $this->Tax->get_info($info->sales_tax_code)->tax_code_name;
+		$tax_code_info = $this->Tax_code->get_info($info->sales_tax_code_id);
+		$tax_code_id = $tax_code_info->tax_code_id;
+
+		if($tax_code_info->tax_code != NULL)
+		{
+			$data['sales_tax_code_label'] = $this->xss_clean($tax_code_info->tax_code . ' ' . $tax_code_info->tax_code_name);
+		}
+		else
+		{
+			$data['sales_tax_code_label'] = '';
+		}
+
 		$packages = array('' => $this->lang->line('items_none'));
 		foreach($this->Customer_rewards->get_all()->result_array() as $row)
 		{
@@ -136,13 +145,13 @@ class Customers extends Persons
 		$data['packages'] = $packages;
 		$data['selected_package'] = $info->package_id;
 
-		if($customer_sales_tax_support == '1')
+		if($this->config->item('use_destination_based_tax') == '1')
 		{
-			$data['customer_sales_tax_enabled'] = TRUE;
+			$data['use_destination_based_tax'] = TRUE;
 		}
 		else
 		{
-			$data['customer_sales_tax_enabled'] = FALSE;
+			$data['use_destination_based_tax'] = FALSE;
 		}
 
 		// retrieve the total amount the customer spent so far together with min, max and average values
@@ -247,24 +256,16 @@ class Customers extends Persons
 		$customer_data = array(
 			'consent' => $this->input->post('consent') != NULL,
 			'account_number' => $this->input->post('account_number') == '' ? NULL : $this->input->post('account_number'),
+			'tax_id' => $this->input->post('tax_id'),
 			'company_name' => $this->input->post('company_name') == '' ? NULL : $this->input->post('company_name'),
 			'discount' => $this->input->post('discount') == '' ? 0.00 : $this->input->post('discount'),
 			'discount_type' => $this->input->post('discount_type') == NULL ? PERCENT : $this->input->post('discount_type'),
 			'package_id' => $this->input->post('package_id') == '' ? NULL : $this->input->post('package_id'),
 			'taxable' => $this->input->post('taxable') != NULL,
 			'date' => $date_formatter->format('Y-m-d H:i:s'),
-			'employee_id' => $this->input->post('employee_id')
+			'employee_id' => $this->input->post('employee_id'),
+			'sales_tax_code_id' => $this->input->post('sales_tax_code_id') == '' ? NULL : $this->input->post('sales_tax_code_id')
 		);
-
-		$tax_code = $this->input->post('sales_tax_code');
-		if(!isset($tax_code))
-		{
-			$customer_data['sales_tax_code'] = '';
-		}
-		else
-		{
-			$customer_data['sales_tax_code'] = $tax_code;
-		}
 
 		if($this->Customer->save_customer($person_data, $customer_data, $customer_id))
 		{
@@ -346,25 +347,25 @@ class Customers extends Persons
 	}
 
 	/*
-	Customers import from excel spreadsheet
+	Customers import from csv spreadsheet
 	*/
-	public function excel()
+	public function csv()
 	{
 		$name = 'import_customers.csv';
 		$data = file_get_contents('../' . $name);
 		force_download($name, $data);
 	}
 
-	public function excel_import()
+	public function csv_import()
 	{
-		$this->load->view('customers/form_excel_import', NULL);
+		$this->load->view('customers/form_csv_import', NULL);
 	}
 
-	public function do_excel_import()
+	public function do_csv_import()
 	{
 		if($_FILES['file_path']['error'] != UPLOAD_ERR_OK)
 		{
-			echo json_encode(array('success' => FALSE, 'message' => $this->lang->line('customers_excel_import_failed')));
+			echo json_encode(array('success' => FALSE, 'message' => $this->lang->line('customers_csv_import_failed')));
 		}
 		else
 		{
@@ -445,18 +446,18 @@ class Customers extends Persons
 
 				if(count($failCodes) > 0)
 				{
-					$message = $this->lang->line('customers_excel_import_partially_failed') . ' (' . count($failCodes) . '): ' . implode(', ', $failCodes);
+					$message = $this->lang->line('customers_csv_import_partially_failed') . ' (' . count($failCodes) . '): ' . implode(', ', $failCodes);
 
 					echo json_encode(array('success' => FALSE, 'message' => $message));
 				}
 				else
 				{
-					echo json_encode(array('success' => TRUE, 'message' => $this->lang->line('customers_excel_import_success')));
+					echo json_encode(array('success' => TRUE, 'message' => $this->lang->line('customers_csv_import_success')));
 				}
 			}
 			else
 			{
-				echo json_encode(array('success' => FALSE, 'message' => $this->lang->line('customers_excel_import_nodata_wrongformat')));
+				echo json_encode(array('success' => FALSE, 'message' => $this->lang->line('customers_csv_import_nodata_wrongformat')));
 			}
 		}
 	}

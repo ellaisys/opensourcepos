@@ -35,6 +35,13 @@ class Employees extends Persons
 	/*
 	Gives search suggestions based on what is being searched for
 	*/
+	public function suggest()
+	{
+		$suggestions = $this->xss_clean($this->Employee->get_search_suggestions($this->input->get('term'), TRUE));
+
+		echo json_encode($suggestions);
+	}
+
 	public function suggest_search()
 	{
 		$suggestions = $this->xss_clean($this->Employee->get_search_suggestions($this->input->post('term')));
@@ -69,7 +76,7 @@ class Employees extends Persons
 		foreach($this->Module->get_all_subpermissions()->result() as $permission)
 		{
 			$permission->module_id = $this->xss_clean($permission->module_id);
-			$permission->permission_id = $this->xss_clean($permission->permission_id);
+			$permission->permission_id = str_replace(' ', '_', $this->xss_clean($permission->permission_id));
 			$permission->grant = $this->xss_clean($this->Employee->has_grant($permission->permission_id, $person_info->person_id));
 
 			$permissions[] = $permission;

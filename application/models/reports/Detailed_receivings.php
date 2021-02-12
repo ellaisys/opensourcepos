@@ -78,11 +78,11 @@ class Detailed_receivings extends Report
 
 		if($inputs['receiving_type'] == 'receiving')
 		{
-			$this->db->where('quantity_purchased > 0');
+			$this->db->where('quantity_purchased >', 0);
 		}
 		elseif($inputs['receiving_type'] == 'returns')
 		{
-			$this->db->where('quantity_purchased < 0');
+			$this->db->where('quantity_purchased <', 0);
 		}
 		elseif($inputs['receiving_type'] == 'requisitions')
 		{
@@ -97,10 +97,30 @@ class Detailed_receivings extends Report
 
 		foreach($data['summary'] as $key=>$value)
 		{
-			$this->db->select('name, item_number, category, quantity_purchased, serialnumber,total, discount, discount_type, item_location, receivings_items_temp.receiving_quantity');
+			$this->db->select('
+				MAX(name) AS name, 
+				MAX(item_number) AS item_number, 
+				MAX(category) AS category, 
+				MAX(quantity_purchased) AS quantity_purchased, 
+				MAX(serialnumber) AS serialnumber, 
+				MAX(total) AS total, 
+				MAX(discount) AS discount, 
+				MAX(discount_type) AS discount_type, 
+				MAX(item_location) AS item_location, 
+				MAX(item_receiving_quantity) AS receiving_quantity');
 			$this->db->from('receivings_items_temp');
 			$this->db->join('items', 'receivings_items_temp.item_id = items.item_id');
-			$this->db->where('receiving_id = '.$value['receiving_id']);
+			if(count($inputs['definition_ids']) > 0)
+			{
+				$format = $this->db->escape(dateformat_mysql());
+				$this->db->select('GROUP_CONCAT(DISTINCT CONCAT_WS(\'_\', definition_id, attribute_value) ORDER BY definition_id SEPARATOR \'|\') AS attribute_values');
+				$this->db->select("GROUP_CONCAT(DISTINCT CONCAT_WS('_', definition_id, DATE_FORMAT(attribute_date, $format)) SEPARATOR '|') AS attribute_dtvalues");
+				$this->db->select('GROUP_CONCAT(DISTINCT CONCAT_WS(\'_\', definition_id, attribute_decimal) SEPARATOR \'|\') AS attribute_dvalues');
+				$this->db->join('attribute_links', 'attribute_links.item_id = items.item_id AND attribute_links.receiving_id = receivings_items_temp.receiving_id AND definition_id IN (' . implode(',', $inputs['definition_ids']) . ')', 'left');
+				$this->db->join('attribute_values', 'attribute_values.attribute_id = attribute_links.attribute_id', 'left');
+			}
+			$this->db->where('receivings_items_temp.receiving_id', $value['receiving_id']);
+			$this->db->group_by('receivings_items_temp.receiving_id, receivings_items_temp.item_id');
 			$data['details'][$key] = $this->db->get()->result_array();
 		}
 
@@ -119,15 +139,15 @@ class Detailed_receivings extends Report
 
 		if($inputs['receiving_type'] == 'receiving')
 		{
-			$this->db->where('quantity_purchased > 0');
+			$this->db->where('quantity_purchased >', 0);
 		}
 		elseif($inputs['receiving_type'] == 'returns')
 		{
-			$this->db->where('quantity_purchased < 0');
+			$this->db->where('quantity_purchased <', 0);
 		}
 		elseif($inputs['receiving_type'] == 'requisitions')
 		{
-			$this->db->where('quantity_purchased = 0');
+			$this->db->where('quantity_purchased', 0);
 		}
 
 		return $this->db->get()->row_array();

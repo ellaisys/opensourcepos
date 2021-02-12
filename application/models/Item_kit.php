@@ -31,9 +31,34 @@ class Item_kit extends CI_Model
 			{
 				return $this->exists($pieces[1]);
 			}
+			else
+			{
+				return $this->item_number_exists($item_kit_id);
+			}
 		}
 
 		return FALSE;
+	}
+
+	/*
+	Determines if a given item_number exists
+	*/
+	public function item_number_exists($item_kit_number, $item_kit_id = '')
+	{
+		if($this->config->item('allow_duplicate_barcodes') != FALSE)
+		{
+			return FALSE;
+		}
+
+		$this->db->where('item_kit_number', (string) $item_kit_number);
+		// check if $item_id is a number and not a string starting with 0
+		// because cases like 00012345 will be seen as a number where it is a barcode
+		if(ctype_digit($item_kit_id) && substr($item_kit_id, 0, 1) !== '0')
+		{
+			$this->db->where('item_kit_id !=', (int) $item_kit_id);
+		}
+
+		return ($this->db->get('item_kits')->num_rows() >= 1);
 	}
 
 	/*
@@ -54,6 +79,7 @@ class Item_kit extends CI_Model
 		$this->db->select('
 		item_kit_id,
 		item_kits.name as name,
+		item_kit_number,
 		items.name as item_name,
 		item_kits.description,
 		items.description as item_description,
@@ -73,22 +99,13 @@ class Item_kit extends CI_Model
 		allow_alt_description,
 		is_serialized,
 		items.deleted,
-		custom1,
-		custom2,
-		custom3,
-		custom4,
-		custom5,
-		custom6,
-		custom7,
-		custom8,
-		custom9,
-		custom10,
 		item_type,
 		stock_type');
 
 		$this->db->from('item_kits');
 		$this->db->join('items', 'item_kits.item_id = items.item_id', 'left');
 		$this->db->where('item_kit_id', $item_kit_id);
+		$this->db->or_where('item_kit_number', $item_kit_id);
 
 		$query = $this->db->get();
 
@@ -150,7 +167,7 @@ class Item_kit extends CI_Model
 	*/
 	public function delete($item_kit_id)
 	{
-		return $this->db->delete('item_kits', array('item_kit_id' => $id));
+		return $this->db->delete('item_kits', array('item_kit_id' => $item_kit_id));
 	}
 
 	/*
@@ -183,6 +200,7 @@ class Item_kit extends CI_Model
 		else
 		{
 			$this->db->like('name', $search);
+			$this->db->or_like('item_kit_number', $search);
 			$this->db->order_by('name', 'asc');
 
 			foreach($this->db->get()->result() as $row)
@@ -222,6 +240,7 @@ class Item_kit extends CI_Model
 		$this->db->from('item_kits AS item_kits');
 		$this->db->like('name', $search);
 		$this->db->or_like('description', $search);
+		$this->db->or_like('item_kit_number', $search);
 
 		//KIT #
 		if(stripos($search, 'KIT ') !== FALSE)

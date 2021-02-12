@@ -1,9 +1,8 @@
-[ ![Download](https://api.bintray.com/packages/jekkos/opensourcepos/opensourcepos/images/download.svg?version=3.2.3) ](https://bintray.com/jekkos/opensourcepos/opensourcepos/3.2.3/link)
+[![Download](https://api.bintray.com/packages/jekkos/opensourcepos/opensourcepos/images/download.svg?version=3.3.3) ](https://bintray.com/jekkos/opensourcepos/opensourcepos/3.3.3/link)
 [![Build Status](https://travis-ci.org/opensourcepos/opensourcepos.svg?branch=master)](https://travis-ci.org/opensourcepos/opensourcepos)
-[![Join the chat at https://gitter.im/jekkos/opensourcepos](https://badges.gitter.im/jekkos/opensourcepos.svg)](https://gitter.im/jekkos/opensourcepos?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![devDependency Status](https://david-dm.org/jekkos/opensourcepos/dev-status.svg)](https://david-dm.org/jekkos/opensourcepos#info=dev)
+[![Join the chat at https://gitter.im/opensourcepos](https://badges.gitter.im/jekkos/opensourcepos.svg)](https://gitter.im/opensourcepos?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![GitHub version](https://badge.fury.io/gh/jekkos%2Fopensourcepos.svg)](https://badge.fury.io/gh/jekkos%2Fopensourcepos)
-[![Translation status](http://weblate.jpeelaer.net/widgets/ospos/-/svg-badge.svg)](http://weblate.jpeelaer.net/engage/ospos/?utm_source=widget)
+[![Translation status](http://translate.opensourcepos.org/widgets/opensourcepos/-/svg-badge.svg)](http://weblate.jpeelaer.net/engage/ospos/?utm_source=widget)
 
 
 Introduction
@@ -11,11 +10,12 @@ Introduction
 
 Open Source Point of Sale is a web based point of sale system.
 The main features are:
-* Stock management (Items and Kits)
-* VAT, customer and multi tiers taxation
+* Stock management (Items and Kits with extensible list of Attributes)
+* VAT, GST, customer and multi tiers taxation
 * Sale register with transactions logging
 * Quotation and invoicing
 * Expenses logging
+* Cashup
 * Receipt and invoice printing and/or emailing
 * Barcode generation and printing
 * Suppliers and Customers database
@@ -35,13 +35,11 @@ The main features are:
 The software is written in PHP language, it uses MySQL (or MariaDB) as data storage back-end and has a simple but intuitive user interface.
 
 The latest 3.x version is a complete overhaul of the original software.
-It is now based on Bootstrap 3 using Bootswatch themes, and still uses CodeIgniter 3 as framework.
+It is now based on Bootstrap 3 using Bootswatch themes, and uses CodeIgniter version 3 as framework.
 It also has improved functionality and security.
 
-Deployed to a Cloud it's a SaaS (Software as a Service) solution.
-
-DEMO
-----
+DEMO / DEV
+----------
 
 A demo version of the latest master version can be found on our [Demo server](https://demo.opensourcepos.org). This is a containerized install which will be reinitialized when new functionality is added to the code repository.
 
@@ -49,16 +47,20 @@ LOGIN using
 * username: admin
 * password: pointofsale
 
+Beside this we also have a [Dev server](https://dev.opensourcepos.org) that runs the build that was triggered with the last repository's commit.
+
+In case of any issues, check our status page at [status.opensourcepos.org](https://status.opensourcepos.org) to confirm whether there is a sever outage.
 
 Installation
 ------------
 
-Please **refrain from creating issues** about installation issues **before reading the FAQ and going through existing github issues**. We have a build pipeline that checks the sanity of our latest repository commit and in case the application itself is broken then our build will be as well.
+Please **refrain from creating issues** about installation problems **before having read the FAQ and went through existing github issues**. We have a build pipeline that checks the sanity of our latest repository commit and in case the application itself is broken then our build will be as well.
 
 This application **can be setup in many different ways** and we only **support the ones described in the INSTALL file linked below**.
 
 Read the [INSTALL.md](https://github.com/opensourcepos/opensourcepos/blob/master/INSTALL.md) in our repository.
 
+[Check our wiki](https://github.com/opensourcepos/opensourcepos/wiki/Supported-hardware-datasheet) for info and recommendations on supported receipt printers and barcode scanners.
 
 License
 -------
@@ -95,6 +97,7 @@ If you like the project, and you are making money out of it in some form, then c
 
 [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MUN6AEG7NY6H8)
 
+If you choose to deploy OSPOS in the cloud, you can contribute to the project by using our referral link. [You will get an initial $100 credits](https://m.do.co/c/ac38c262507b) for running OSPOS on a cloud instance with DigitalOcean. 
 
 Language Translations
 ---------------------
@@ -110,15 +113,21 @@ Reporting Bugs
 --------------
 
 If you are taking a release candidate code please make sure you always run the latest database upgrade script and you took the latest code from master.
-Please DO NOT post issues if you have not done those step.
+Please DO NOT post issues if you have not completed this step.
 
-Bug reports must follow this schema:
+- Versions **≥ 3.3.0**:
+
+Please **Copy** the info under **System Info tab in configuration section** in order to give us the required details.
+
+- Versions **< 3.2.3**:
+
+Bug reports must follow the below schema:
 
 1. Ospos **version string with git commit hash** (see ospos footer)
-2. OS name and version running your Web Server (e.g. CentOS 6.9, Ubuntu 16.4, Windows 10)
-3. Web Server name and version (e.g. Apache 2.2, Apache 2.4, Nginx 1.12, Nginx 1.13)
-4. Database name and version (e.g. MySQL 5.5, MySQL 5.6, MySQL 5.7, MariaDB 10.0, MariaDB 10.1, MariaDB 10.2)
-5. PHP version (e.g. 5.5, 5.6, 7.0, 7.1)
+2. OS name and version running your Web Server (e.g. CentOS 6.9, Ubuntu 20, Windows 10)
+3. Web Server name and version (e.g. Apache 2.4, Nginx 1.12, Nginx 1.13)
+4. Database name and version (e.g. MySQL 5.6, MySQL 5.7, MariaDB 10.2, MariaDB 10.3)
+5. PHP version (e.g. 7.2, 7.3, 7.4)
 6. Language selected in OSPOS (e.g. English, Spanish)
 7. Any configuration of OSPOS that you changed
 8. Exact steps to reproduce the issue (test case)
@@ -139,11 +148,15 @@ FAQ
 
 * Apache server configurations are SysAdmin issues and not strictly related to OSPOS. Please make sure you first can show a "hello world" html page before pointing to OSPOS public directory. Make sure .htaccess is correctly configured.
 
-* If the avatar pictures are not shown in Items or at Item save time you get an error, please make sure your public and subdirs are assigned to the correct owner and the access permission is set to 755.
+* If the avatar pictures are not shown in Items or at Item save time you get an error, please make sure your public and subdirs are assigned to the correct owner and the access permission is set to 750.
 
 * If you install ospos in docker behind a proxy that performs ssloffloading, you can enable the url generated to be https instead of http, by activating the environment variable FORCE_HTTPS = 1.
 
 * If you have suhosin installed and face an issue with CSRF, please make sure you read [issue #1492](https://github.com/opensourcepos/opensourcepos/issues/1492).
+
+* PHP 8.0 is not currently supported, see [issue #3051](https://github.com/opensourcepos/opensourcepos/issues/3051).
+
+* PHP 5.5 and 5.6 are no longer supported due to the fact that they have been deprecated and not safe to use from security point of view.
 
 Credits
 -------

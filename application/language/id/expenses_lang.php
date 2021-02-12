@@ -1,4 +1,5 @@
-<?php
+<?php 
+
 $lang["expenses_add_item"] = "Tambahkan biaya";
 $lang["expenses_amount"] = "Jumlah";
 $lang["expenses_amount_number"] = "Jumlah harus berupa angka";
@@ -21,8 +22,8 @@ $lang["expenses_date_required"] = "tanggal harus diisi";
 $lang["expenses_debit"] = "Kartu Debit";
 $lang["expenses_debit_filter"] = "Kartu Debit";
 $lang["expenses_description"] = "Deskripsi";
-$lang["expenses_due"] = "";
-$lang["expenses_due_filter"] = "";
+$lang["expenses_due"] = "Jatuh Tempo";
+$lang["expenses_due_filter"] = "Jatuh Tempo";
 $lang["expenses_employee"] = "Dibuat oleh";
 $lang["expenses_error_adding_updating"] = "Galat menambahkan / memperbaharui Biaya";
 $lang["expenses_expense_id"] = "Id";
@@ -35,6 +36,7 @@ $lang["expenses_no_expenses_to_display"] = "Belum ada Biaya yang ditampilkan";
 $lang["expenses_none_selected"] = "Anda belum memilih Biaya satu pun";
 $lang["expenses_one_or_multiple"] = "Biaya";
 $lang["expenses_payment"] = "Jenis Pembayaran";
+$lang["expenses_start_typing_supplier_name"] = "Ketik nama pemasok ...";
 $lang["expenses_successful_adding"] = "Berhasil menambahkan Biaya";
 $lang["expenses_successful_deleted"] = "Berhasil menghapus Biaya";
 $lang["expenses_successful_updating"] = "Berhasil memperbaharui Biaya";

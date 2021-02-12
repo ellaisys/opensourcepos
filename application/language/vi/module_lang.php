@@ -1,6 +1,10 @@
 <?php 
 
+$lang["module_attributes"] = "Thuộc tính";
+$lang["module_attributes_desc"] = "Thêm, Cập nhật, Xóa và Tìm kiếm các thuộc tính.";
 $lang["module_both"] = "Cả hai";
+$lang["module_cashups"] = "";
+$lang["module_cashups_desc"] = "";
 $lang["module_config"] = "Cấu hình";
 $lang["module_config_desc"] = "Thay đổi cấu hình của OSPOS.";
 $lang["module_customers"] = "Khách hàng";

@@ -9,8 +9,6 @@
 
 	$this->load->view('partial/print_receipt', array('print_after_sale', $print_after_sale, 'selected_printer'=>'receipt_printer')); 
 
-	// Temporarily loads the system language for _lang to print invoice in the system language rather than user defined.
-	load_language(TRUE,array('common','receivings','suppliers','employees','items','sales'));
 ?>
 
 <div class="print_hide" id="control_buttons" style="text-align:right">
@@ -78,7 +76,7 @@
 		{
 		?>
 			<tr>
-				<td><?php echo $item['name']; ?></td>
+				<td><?php echo $item['name'] . ' ' . $item['attribute_values']; ?></td>
 				<td><?php echo to_currency($item['price']); ?></td>
 				<td><?php echo to_quantity_decimals($item['quantity']) . " " . ($show_stock_locations ? " [" . $item['stock_name'] . "]" : ""); 
 				?>&nbsp;&nbsp;&nbsp;x <?php echo $item['receiving_quantity'] != 0 ? to_quantity_decimals($item['receiving_quantity']) : 1; ?></td>

@@ -1,5 +1,33 @@
 <?php $this->lang->load('calendar'); $this->lang->load('date'); ?>
 
+var pickerconfig = function(config) {
+    return $.extend({
+        format: "<?php echo dateformat_bootstrap($this->config->item('dateformat')) . ' ' . dateformat_bootstrap($this->config->item('timeformat'));?>",
+        <?php
+        $t = $this->config->item('timeformat');
+        $m = $t[strlen($t)-1];
+        if( strpos($this->config->item('timeformat'), 'a') !== false || strpos($this->config->item('timeformat'), 'A') !== false )
+        {
+            ?>
+            showMeridian: true,
+            <?php
+        }
+        else
+        {
+            ?>
+            showMeridian: false,
+            <?php
+        }
+        ?>
+        minuteStep: 1,
+        autoclose: true,
+        todayBtn: true,
+        todayHighlight: true,
+        bootcssVer: 3,
+        language: "<?php echo current_language_code(); ?>"
+    }, <?php echo isset($config) ? $config : '{}' ?>);
+};
+
 $.fn.datetimepicker.dates['<?php echo $this->config->item("language"); ?>'] = {
     days: [
 		"<?php echo $this->lang->line("cal_sunday"); ?>",
@@ -80,3 +108,5 @@ $.fn.datetimepicker.dates['<?php echo $this->config->item("language"); ?>'] = {
     ?>
     weekStart: <?php echo $this->lang->line("datepicker_weekstart"); ?>
 };
+
+$(".datetime").datetimepicker(pickerconfig());

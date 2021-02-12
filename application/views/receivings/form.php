@@ -12,7 +12,13 @@
 		<div class="form-group form-group-sm">
 			<?php echo form_label($this->lang->line('receivings_date'), 'date', array('class'=>'control-label col-xs-3')); ?>
 			<div class='col-xs-8'>
-				<?php echo form_input(array('name'=>'date','value'=>date($this->config->item('dateformat') . ' ' . $this->config->item('timeformat'), strtotime($receiving_info['receiving_time'])), 'id'=>'datetime', 'class'=>'form-control input-sm'));?>
+				<?php echo form_input(array(
+						'name'	=> 'date',
+						'value'	=> to_datetime(strtotime($receiving_info['receiving_time'])),
+						'id'	=> 'datetime',
+						'class'	=> 'datetime form-control input-sm',
+        					'readonly' => 'readonly'));
+				?>
 			</div>
 		</div>
 		
@@ -51,34 +57,8 @@
 $(document).ready(function()
 {
 	<?php $this->load->view('partial/datepicker_locale'); ?>
-	
-	$('#datetime').datetimepicker(
-	{
-		format: "<?php echo dateformat_bootstrap($this->config->item("dateformat")) . ' ' . dateformat_bootstrap($this->config->item("timeformat"));?>",
-		startDate: "<?php echo date($this->config->item('dateformat') . ' ' . $this->config->item('timeformat'), mktime(0, 0, 0, 1, 1, 2010));?>",
-		<?php
-		$t = $this->config->item('timeformat');
-		$m = $t[strlen($t)-1];
-		if( strpos($this->config->item('timeformat'), 'a') !== false || strpos($this->config->item('timeformat'), 'A') !== false )
-		{ 
-		?>
-			showMeridian: true,
-		<?php 
-		}
-		else
-		{
-		?>
-			showMeridian: false,
-		<?php 
-		}
-		?>
-		minuteStep: 1,
-		autoclose: true,
-		todayBtn: true,
-		todayHighlight: true,
-		bootcssVer: 3,
-		language: "<?php echo current_language_code(); ?>"
-	});
+
+    $('#datetime').datetimepicker(pickerconfig);
 
 	var fill_value = function(event, ui) {
 		event.preventDefault();
